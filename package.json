@@ -1,0 +1,25 @@
+{
+  "name": "acquisitions-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node --watch src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Arvind-Sabarinathan/acquisitions-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/Arvind-Sabarinathan/acquisitions-api/issues"
+  },
+  "homepage": "https://github.com/Arvind-Sabarinathan/acquisitions-api#readme",
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1"
+  }
+}
