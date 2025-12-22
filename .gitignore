@@ -2,5 +2,9 @@ node_modules/
 docs.txt
 .vscode/
 .env
+.env.development
+.env.production
+.env.local
 logs/
 prompts/
+.neon_local/

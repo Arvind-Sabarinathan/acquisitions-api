@@ -1,0 +1,50 @@
+services:
+  # Neon Local Proxy - Creates ephemeral database branches for development
+  neon-local:
+    image: neondatabase/neon_local:latest
+    container_name: acquisitions-neon-local
+    ports:
+      - '5432:5432'
+    env_file:
+      - .env.development
+    networks:
+      - acquisitions-network
+    healthcheck:
+      test: ['CMD', 'pg_isready', '-h', 'localhost', '-p', '5432']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Application Service
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    container_name: acquisitions-api-dev
+    ports:
+      - '3000:3000'
+    env_file:
+      - .env.development
+    volumes:
+      # Mount source code for hot-reload during development
+      - ./src:/app/src
+      - ./package.json:/app/package.json
+      - ./drizzle.config.js:/app/drizzle.config.js
+      # Named volume for node_modules to avoid conflicts
+      - node_modules:/app/node_modules
+      # Mount logs directory
+      - ./logs:/app/logs
+    depends_on:
+      neon-local:
+        condition: service_healthy
+    networks:
+      - acquisitions-network
+    command: npm run dev
+
+volumes:
+  node_modules:
+
+networks:
+  acquisitions-network:
+    driver: bridge
