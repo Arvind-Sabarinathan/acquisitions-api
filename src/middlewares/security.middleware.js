@@ -4,6 +4,10 @@ import { slidingWindow } from '@arcjet/node';
 
 const securityMiddleware = async (req, res, next) => {
   try {
+    if (process.env.NODE_ENV === 'test') {
+      return next();
+    }
+
     const role = req.user?.role || 'guest';
 
     let limit;
@@ -18,6 +22,8 @@ const securityMiddleware = async (req, res, next) => {
       case 'guest':
         limit = 5;
         break;
+      default:
+        limit = 5;
     }
 
     const client = aj.withRule(
@@ -64,7 +70,7 @@ const securityMiddleware = async (req, res, next) => {
         path: req.path,
       });
       return res
-        .status(403)
+        .status(429)
         .json({ error: 'Forbidden', message: 'Too many requests' });
     }
     next();
